@@ -6,6 +6,7 @@ import Employer from '@/models/employerSchema';
 export async function POST(req) {
   try {
     const { businessEmail, password } = await req.json();
+    const secret = process.env.JWT_SECRET || 'fallback_secret_key';
 
     // Connect to the database
     await dbConnect();
@@ -30,7 +31,7 @@ export async function POST(req) {
     // Create JWT token
     const token = jwt.sign(
       { employerId: employer._id, businessEmail: employer.businessEmail },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: '1d' }
     );
 
